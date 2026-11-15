@@ -5,6 +5,7 @@ from backend.database import initialize_database
 from backend.seed_data import seed_all_demo_data
 from frontend.login_page import render_login_page
 from frontend.theme import apply_custom_theme
+from frontend.dashboard_page import render_dashboard_page
 
 st.set_page_config(
     page_title="Inventory Management",
@@ -89,8 +90,7 @@ def main():
     )
 
     with tab_overview:
-        st.markdown("<h3 style='font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Overview Dashboard</h3>", unsafe_allow_html=True)
-        st.info("Overview dashboard metrics and charts will load here.")
+        render_dashboard_page(user)
 
     with tab_inventory:
         st.markdown("<h3 style='font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Inventory Management</h3>", unsafe_allow_html=True)

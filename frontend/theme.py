@@ -4,7 +4,7 @@ import streamlit as st
 
 
 def apply_custom_theme():
-    """Inject production FAANG-grade CSS with pixel-perfect top tabs and typography."""
+    """Inject production FAANG-grade CSS with uniform KPI cards and clear chart containers."""
     st.markdown(
         """
         <style>
@@ -36,7 +36,7 @@ def apply_custom_theme():
                 margin: 0 auto !important;
             }
 
-            /* Enterprise Tab Strip (Stripe / GitHub style) */
+            /* Enterprise Tab Strip */
             .stTabs [data-baseweb="tab-list"] {
                 gap: 2.25rem !important;
                 border-bottom: 1px solid #E2E8F0 !important;
@@ -63,13 +63,18 @@ def apply_custom_theme():
                 border-bottom: 2px solid #0F172A !important;
             }
 
-            /* KPI Cards */
+            /* Uniform KPI Metric Cards: Exact same length, height, and alignment */
             .kpi-card {
                 background: #FFFFFF;
                 border: 1px solid #E2E8F0;
                 border-radius: 8px;
-                padding: 18px 22px;
+                padding: 16px 18px;
                 box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+                height: 114px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                box-sizing: border-box !important;
                 transition: transform 0.18s ease, box-shadow 0.18s ease;
             }
             .kpi-card:hover {
@@ -77,63 +82,35 @@ def apply_custom_theme():
                 box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.08);
             }
             .kpi-title {
-                font-size: 0.78rem;
+                font-size: 0.74rem;
                 font-weight: 600;
                 color: #64748B;
                 text-transform: uppercase;
                 letter-spacing: 0.06em;
-                margin-bottom: 6px;
+                margin-bottom: 2px;
             }
             .kpi-value {
-                font-size: 1.85rem;
+                font-size: 1.75rem;
                 font-weight: 700;
                 color: #0F172A;
-                line-height: 1.15;
+                line-height: 1.1;
                 letter-spacing: -0.02em;
             }
             .kpi-subtitle {
-                font-size: 0.8rem;
+                font-size: 0.78rem;
                 color: #94A3B8;
-                margin-top: 6px;
                 font-weight: 500;
+                min-height: 16px;
             }
 
-            /* Status Badges */
-            .badge-safe {
-                background-color: #F0FDF4;
-                color: #166534;
-                border: 1px solid #BBF7D0;
-                padding: 3px 9px;
-                border-radius: 6px;
-                font-size: 0.75rem;
-                font-weight: 600;
-            }
-            .badge-at-risk {
-                background-color: #FFFBEB;
-                color: #92400E;
-                border: 1px solid #FDE68A;
-                padding: 3px 9px;
-                border-radius: 6px;
-                font-size: 0.75rem;
-                font-weight: 600;
-            }
-            .badge-critical {
-                background-color: #FEF2F2;
-                color: #991B1B;
-                border: 1px solid #FECACA;
-                padding: 3px 9px;
-                border-radius: 6px;
-                font-size: 0.75rem;
-                font-weight: 600;
-            }
-            .badge-expired {
-                background-color: #F8FAFC;
-                color: #64748B;
+            /* Chart Card Containers */
+            .chart-card {
+                background: #FFFFFF;
                 border: 1px solid #E2E8F0;
-                padding: 3px 9px;
-                border-radius: 6px;
-                font-size: 0.75rem;
-                font-weight: 600;
+                border-radius: 8px;
+                padding: 18px;
+                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+                margin-bottom: 16px;
             }
 
             /* Buttons */
@@ -165,7 +142,7 @@ def apply_custom_theme():
 
 def render_kpi(title: str, value: Any, subtitle: str = ""):
     """Render a clean FAANG-grade white KPI metric card."""
-    sub_html = f'<div class="kpi-subtitle">{subtitle}</div>' if subtitle else ""
+    sub_html = f'<div class="kpi-subtitle">{subtitle}</div>' if subtitle else '<div class="kpi-subtitle">&nbsp;</div>'
     st.markdown(
         f"""
         <div class="kpi-card">
