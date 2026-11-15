@@ -7,7 +7,7 @@ from frontend.login_page import render_login_page
 from frontend.theme import apply_custom_theme
 
 st.set_page_config(
-    page_title="DMart Retail DSS",
+    page_title="Inventory Management",
     page_icon="📦",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -35,9 +35,13 @@ def main():
     with st.sidebar:
         st.markdown(
             f"""
-            <div style="padding: 10px 0 20px 0;">
-                <h3 style="color: #1E3A8A; margin: 0;">DMart Retail DSS</h3>
-                <p style="color: #64748B; font-size: 0.85rem; margin: 0;">Near-Expiry Recovery</p>
+            <div style="padding: 10px 0 16px 0;">
+                <div style="font-size: 1.1rem; font-weight: 700; color: #0F172A; letter-spacing: -0.015em;">
+                    Inventory Management
+                </div>
+                <div style="font-size: 0.75rem; color: #64748B; margin-top: 2px;">
+                    Near-Expiry Decision System
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -45,10 +49,14 @@ def main():
 
         st.markdown(
             f"""
-            <div style="background: #F1F5F9; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
-                <div style="font-weight: 700; color: #0F172A;">{user['full_name']}</div>
-                <div style="font-size: 0.8rem; color: #475569;">Role: <b>{user['role'].upper()}</b></div>
-                <div style="font-size: 0.8rem; color: #475569;">Branch: <b>{user['branch_name']}</b></div>
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 12px 14px; border-radius: 6px; margin-bottom: 20px;">
+                <div style="font-weight: 600; font-size: 0.88rem; color: #0F172A;">{user['full_name']}</div>
+                <div style="font-size: 0.78rem; color: #475569; margin-top: 2px;">
+                    Role: <span style="font-weight: 600; color: #0F172A;">{user['role'].upper()}</span>
+                </div>
+                <div style="font-size: 0.78rem; color: #475569;">
+                    Branch: <span style="font-weight: 600; color: #0F172A;">{user['branch_name']}</span>
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -64,29 +72,30 @@ def main():
                 "🔄 Inter-Branch Transfers",
             ],
             key="selected_page",
+            label_visibility="collapsed",
         )
 
-        st.markdown("<hr style='margin: 25px 0 15px 0; border: none; border-top: 1px solid #E2E8F0;'>", unsafe_allow_html=True)
+        st.markdown("<hr style='margin: 24px 0 16px 0; border: none; border-top: 1px solid #E2E8F0;'>", unsafe_allow_html=True)
 
-        if st.button("🚪 Log Out", use_container_width=True):
+        if st.button("Sign Out", use_container_width=True):
             st.session_state["current_user"] = None
             st.rerun()
 
-    # Placeholder router for next pages
+    # Router
     if "Overview Dashboard" in page:
-        st.header("📊 Overview Dashboard")
-        st.info("Dashboard module will load here next.")
+        st.markdown("<h2 style='font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Overview Dashboard</h2>", unsafe_allow_html=True)
+        st.info("Dashboard module will load here.")
     elif "Inventory Management" in page:
-        st.header("📦 Inventory Management")
+        st.markdown("<h2 style='font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Inventory Management</h2>", unsafe_allow_html=True)
         st.info("Inventory batches module will load here.")
     elif "Daily Sales Records" in page:
-        st.header("📈 Daily Sales Records")
+        st.markdown("<h2 style='font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Daily Sales Records</h2>", unsafe_allow_html=True)
         st.info("Daily sales module will load here.")
     elif "Recovery & Monte Carlo" in page:
-        st.header("🎯 Near-Expiry Recovery & Monte Carlo Simulation")
+        st.markdown("<h2 style='font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Near-Expiry Recovery & Monte Carlo</h2>", unsafe_allow_html=True)
         st.info("Monte Carlo decision engine module will load here.")
     elif "Inter-Branch Transfers" in page:
-        st.header("🔄 Inter-Branch Transfer Workflow")
+        st.markdown("<h2 style='font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Inter-Branch Transfers</h2>", unsafe_allow_html=True)
         st.info("Transfer requests module will load here.")
 
 
