@@ -10,12 +10,49 @@ st.set_page_config(
     page_title="Inventory Management",
     page_icon="📦",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # Ensure database and seed data exist
 initialize_database()
 seed_all_demo_data()
+
+
+def render_top_header(user):
+    """Render a perfectly aligned top header bar."""
+    col_brand, col_user = st.columns([2.5, 1.5], vertical_alignment="center")
+
+    with col_brand:
+        st.markdown(
+            f"""
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 1.35rem; font-weight: 700; color: #0F172A; letter-spacing: -0.02em;">
+                    Inventory Management
+                </span>
+                <span style="font-size: 0.78rem; font-weight: 600; color: #475569; background: #F1F5F9; border: 1px solid #E2E8F0; padding: 3px 10px; border-radius: 14px;">
+                    {user['branch_name']}
+                </span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with col_user:
+        u_info, u_btn = st.columns([2.4, 1], vertical_alignment="center")
+        with u_info:
+            st.markdown(
+                f"""
+                <div style="text-align: right; line-height: 1.25;">
+                    <div style="font-size: 0.86rem; font-weight: 600; color: #0F172A;">{user['full_name']}</div>
+                    <div style="font-size: 0.72rem; color: #64748B; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">{user['role']}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        with u_btn:
+            if st.button("Sign Out", key="top_sign_out", use_container_width=True):
+                st.session_state["current_user"] = None
+                st.rerun()
 
 
 def main():
@@ -26,76 +63,49 @@ def main():
 
     user = st.session_state["current_user"]
 
-    # 1. If not logged in, show Login Screen
+    # 1. Login Screen if not authenticated
     if user is None:
         render_login_page()
         return
 
-    # 2. Sidebar Navigation for Logged-In Users
-    with st.sidebar:
-        st.markdown(
-            f"""
-            <div style="padding: 10px 0 16px 0;">
-                <div style="font-size: 1.1rem; font-weight: 700; color: #0F172A; letter-spacing: -0.015em;">
-                    Inventory Management
-                </div>
-                <div style="font-size: 0.75rem; color: #64748B; margin-top: 2px;">
-                    Near-Expiry Decision System
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    # 2. Top Header (Brand on Left, User & Sign Out on Right)
+    render_top_header(user)
 
-        st.markdown(
-            f"""
-            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 12px 14px; border-radius: 6px; margin-bottom: 20px;">
-                <div style="font-weight: 600; font-size: 0.88rem; color: #0F172A;">{user['full_name']}</div>
-                <div style="font-size: 0.78rem; color: #475569; margin-top: 2px;">
-                    Role: <span style="font-weight: 600; color: #0F172A;">{user['role'].upper()}</span>
-                </div>
-                <div style="font-size: 0.78rem; color: #475569;">
-                    Branch: <span style="font-weight: 600; color: #0F172A;">{user['branch_name']}</span>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    # 3. Clean Stripe/GitHub style tab navigation
+    (
+        tab_overview,
+        tab_inventory,
+        tab_sales,
+        tab_decision,
+        tab_transfers,
+    ) = st.tabs(
+        [
+            "Overview",
+            "Inventory",
+            "Daily Sales",
+            "Decision Engine",
+            "Transfers",
+        ]
+    )
 
-        page = st.radio(
-            "Navigation",
-            [
-                "📊 Overview Dashboard",
-                "📦 Inventory Management",
-                "📈 Daily Sales Records",
-                "🎯 Recovery & Monte Carlo",
-                "🔄 Inter-Branch Transfers",
-            ],
-            key="selected_page",
-            label_visibility="collapsed",
-        )
+    with tab_overview:
+        st.markdown("<h3 style='font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Overview Dashboard</h3>", unsafe_allow_html=True)
+        st.info("Overview dashboard metrics and charts will load here.")
 
-        st.markdown("<hr style='margin: 24px 0 16px 0; border: none; border-top: 1px solid #E2E8F0;'>", unsafe_allow_html=True)
-
-        if st.button("Sign Out", use_container_width=True):
-            st.session_state["current_user"] = None
-            st.rerun()
-
-    # Router
-    if "Overview Dashboard" in page:
-        st.markdown("<h2 style='font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Overview Dashboard</h2>", unsafe_allow_html=True)
-        st.info("Dashboard module will load here.")
-    elif "Inventory Management" in page:
-        st.markdown("<h2 style='font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Inventory Management</h2>", unsafe_allow_html=True)
+    with tab_inventory:
+        st.markdown("<h3 style='font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Inventory Management</h3>", unsafe_allow_html=True)
         st.info("Inventory batches module will load here.")
-    elif "Daily Sales Records" in page:
-        st.markdown("<h2 style='font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Daily Sales Records</h2>", unsafe_allow_html=True)
+
+    with tab_sales:
+        st.markdown("<h3 style='font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Daily Sales Records</h3>", unsafe_allow_html=True)
         st.info("Daily sales module will load here.")
-    elif "Recovery & Monte Carlo" in page:
-        st.markdown("<h2 style='font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Near-Expiry Recovery & Monte Carlo</h2>", unsafe_allow_html=True)
+
+    with tab_decision:
+        st.markdown("<h3 style='font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Near-Expiry Recovery & Monte Carlo Decision Engine</h3>", unsafe_allow_html=True)
         st.info("Monte Carlo decision engine module will load here.")
-    elif "Inter-Branch Transfers" in page:
-        st.markdown("<h2 style='font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Inter-Branch Transfers</h2>", unsafe_allow_html=True)
+
+    with tab_transfers:
+        st.markdown("<h3 style='font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;'>Inter-Branch Transfers</h3>", unsafe_allow_html=True)
         st.info("Transfer requests module will load here.")
 
 
